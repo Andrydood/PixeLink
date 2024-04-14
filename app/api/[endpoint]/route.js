@@ -9,6 +9,6 @@ export async function GET(request,{ params: {endpoint} }) {
     const data = JSON.parse(output);
     return NextResponse.json(data, { status: 200 });
   } catch (err){
-    return NextResponse.json({}, { status: 500 });
+    return NextResponse.json({gameIsOver:'true'}, { status: 200 });
   }
 }

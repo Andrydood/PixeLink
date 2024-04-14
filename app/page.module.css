@@ -1,6 +1,11 @@
 .main {
   display: flex;
   background-color: #B4B4B4;
+  height: 100vh;
+}
+.loading{
+  font-family: monospace;
+  padding: 20px;
 }
 .chatWindow {
   display: flex;
@@ -25,10 +30,10 @@
 }
 .sentimentContainer{
   height: 5px;
-  background-color: azure;
+  background-color: #FAFAFA;
   width: 100%;
 }
 .sentimentBar{
   height: 100%;
-  background-color: darkkhaki;
+  background-color: #FFDB58;
 }

@@ -22,7 +22,11 @@ const findLastMatch = (array, criteriaFunction) => {
 const getChampionNameForPlayerName = (playerName, playerList) => playerList.find(p => p.summonerName == playerName)?.championName;
 
 const SUPPORTED_EVENTS = [
-  'ChampionKill'
+  'ChampionKill',
+  'TurretKilled',
+  'DragonKill',
+  'HeraldKill',
+  'BaronKill'
 ];
 
 export default function Home() {
@@ -53,7 +57,7 @@ export default function Home() {
           `
           You are the league of legends character '${returnedChampionName}', and are chatting to the person playing as you on the game.
           The message only includes what the character wants to tell the player.
-          React accordingly to how the player performs in the game.
+          React accordingly to how the player performs in the game, if the player performs well be happy, if the player performs poorly be annoyed.
           Act exactly as '${returnedChampionName}'  from league of legends would act.
           Speak with their intonation and characteristics.
           don't be overly positive.
@@ -107,6 +111,43 @@ export default function Home() {
                 }]
               );
           }
+        case 'TurretKilled':
+          if (latestEvent.KillerName == playerName){
+            setMessages([
+              ...messages,
+              { role: "system", content:
+                `${championName} just destroyed a turret`
+                }]
+              );
+          }
+        case 'DragonKill':
+          if (latestEvent.KillerName == playerName){
+            setMessages([
+              ...messages,
+              { role: "system", content:
+                `${championName} just killed a dragon`
+                }]
+              );
+          }
+        case 'HeraldKill':
+          if (latestEvent.KillerName == playerName){
+            setMessages([
+              ...messages,
+              { role: "system", content:
+                `${championName} just rift Herald`
+                }]
+              );
+          }
+        case 'BaronKill':
+          if (latestEvent.KillerName == playerName){
+            setMessages([
+              ...messages,
+              { role: "system", content:
+                `${championName} just defeated Baron`
+                }]
+              );
+          }
+
         default:
       }
     }
@@ -126,12 +167,13 @@ export default function Home() {
       await getEventData();
     }, EVENT_INTERVAL);
 
-    return () => clearInterval(interval); // This represents the unmount function, in which you need to clear your interval to prevent memory leaks.
+    return () => clearInterval(interval);
   }, [latestEvent]);
 
   useEffect(()=>{
+    console.log(messages);
+
     const queryAI = async () => {
-      console.log(messages);
       const completion = await openai.chat.completions.create({
         messages,
         model: "gpt-3.5-turbo",
